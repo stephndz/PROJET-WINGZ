@@ -229,11 +229,13 @@ public class ScrollingActivity extends AppCompatActivity
     protected void onStart() {
         mGoogleApiClient.connect();
         super.onStart();
+        Log.i(TAG, "Scrolling Activity onStart");
     }
 
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
+        Log.i(TAG, "Scrolling Activity onStop");
     }
 
     @Override
@@ -246,6 +248,7 @@ public class ScrollingActivity extends AppCompatActivity
         if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
             startLocationUpdates();
         }
+        Log.i(TAG, "Scrolling Activity onResume");
     }
     @Override
     protected void onPause() {
@@ -254,6 +257,7 @@ public class ScrollingActivity extends AppCompatActivity
         if (mGoogleApiClient.isConnected()) {
             stopLocationUpdates();
         }
+        Log.i(TAG, "Scrolling Activity onPause");
     }
 
         @Override
@@ -319,7 +323,7 @@ public class ScrollingActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-        //Toast.makeText(this, getResources().getString(R.string.location_updated_message),
-        //        Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Location Updated:" + location.toString() ,
+                Toast.LENGTH_SHORT).show();
     }
 }
