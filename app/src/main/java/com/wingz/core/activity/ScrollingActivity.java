@@ -21,12 +21,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.wingz.core.activity.dummy.DummyContent;
 
 import java.text.DateFormat;
 import java.util.Date;
 
 public class ScrollingActivity extends AppCompatActivity
         implements
+        ItemFragment.OnListFragmentInteractionListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -326,5 +328,10 @@ public class ScrollingActivity extends AppCompatActivity
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         Toast.makeText(this, "Location Updated:" + location.toString() ,
                 Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+
     }
 }
