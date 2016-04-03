@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.example.dasha.wingz;
+package com.wingz.core.test;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -27,11 +27,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.dasha.wingz.R;
+import com.wingz.core.test.R;
 import com.wingz.core.activity.dummy.DummyContent;
 import com.wingz.core.activity.dummy.DummyContent.DummyItem;
-
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.

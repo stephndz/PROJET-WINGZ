@@ -24,7 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.dasha.wingz.R;
+import com.wingz.core.test.R;
 import com.wingz.core.activity.ItemFragment.OnListFragmentInteractionListener;
 import com.wingz.core.activity.dummy.DummyContent.DummyItem;
 
