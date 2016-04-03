@@ -38,6 +38,17 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            <ImageView
+                android:id="@+id/collapsing_toolbar_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:layout_marginLeft="@dimen/negative_collapsing_toolbar_margin"
+                android:layout_marginRight="@dimen/negative_collapsing_toolbar_margin"
+                android:fitsSystemWindows="true"
+                android:src="@mipmap/blurred_image"
+                app:layout_collapseMode="parallax"
+                />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

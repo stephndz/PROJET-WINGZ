@@ -1,4 +1,4 @@
-package com.example.dasha.wingz;
+package com.wingz.core.test;
 
 import org.junit.Test;
 

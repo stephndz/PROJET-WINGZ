@@ -29,4 +29,7 @@
     tools:context="com.wingz.core.activity.ContentActivity"
     tools:showIn="@layout/activity_content">
 
+
+    <include layout="@layout/content_scrolling" />
+
 </RelativeLayout>
