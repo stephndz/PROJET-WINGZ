@@ -345,6 +345,7 @@ public class ScrollingActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+        Log.d(TAG,Double.toString(location.getAltitude()));
         Toast.makeText(this, "Location Updated:" + location.toString() ,
                 Toast.LENGTH_SHORT).show();
     }
