@@ -64,7 +64,7 @@
     <fragment android:name="com.wingz.core.activity.ItemFragment"
         android:id="@+id/list"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_marginRight="@dimen/small_margin"
         android:layout_marginLeft="@dimen/small_margin"/>
