@@ -21,6 +21,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.wingz.core.model.Site;
@@ -44,23 +45,23 @@ public class SiteDBHelper extends DBHelper<Site>{
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(SITE_COLUMN_PATH, site.getPath());
-        values.put(SITE_COLUMN_TITLE, site.getTitle());
-        values.put(SITE_COLUMN_TYPE, site.getType());
-        values.put(SITE_COLUMN_CONTENT, site.getContent());
-        values.put(SITE_COLUMN_LATITUDE, site.getLatitude());
-        values.put(SITE_COLUMN_LONGITUDE, site.getLongitude());
-        values.put(SITE_COLUMN_RADIUS, site.getRadius());
-        values.put(SITE_COLUMN_EVENTS, site.getEvents());
+        values.put(SiteEntry.COLUMN_PATH, site.getPath());
+        values.put(SiteEntry.COLUMN_TITLE, site.getTitle());
+        values.put(SiteEntry.COLUMN_TYPE, site.getType());
+        values.put(SiteEntry.COLUMN_CONTENT, site.getContent());
+        values.put(SiteEntry.COLUMN_LATITUDE, site.getLatitude());
+        values.put(SiteEntry.COLUMN_LONGITUDE, site.getLongitude());
+        values.put(SiteEntry.COLUMN_RADIUS, site.getRadius());
+        values.put(SiteEntry.COLUMN_EVENTS, site.getEvents());
 
-        return db.insert(SITE_TABLE_NAME, null, values);
+        return db.insert(SiteEntry.TABLE_NAME, null, values);
     }
 
     @Override
     public void delete(long key) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(SITE_TABLE_NAME, KEY_ID + " = ?",
+        db.delete(SiteEntry.TABLE_NAME, SiteEntry._ID + " = ?",
                 new String[] { String.valueOf(key) });
     }
 
@@ -68,8 +69,8 @@ public class SiteDBHelper extends DBHelper<Site>{
     public Site getOne(long key) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + SITE_TABLE_NAME + " WHERE "
-                + KEY_ID + " = " + key;
+        String selectQuery = "SELECT  * FROM " + SiteEntry.TABLE_NAME + " WHERE "
+                + SiteEntry._ID + " = " + key;
 
         Log.d(TAG, selectQuery);
 
@@ -80,15 +81,15 @@ public class SiteDBHelper extends DBHelper<Site>{
 
         Site site = null;
         if (c != null) {
-            site = new Site(c.getInt(c.getColumnIndex(KEY_ID)),
-                    c.getString(c.getColumnIndex(SITE_COLUMN_PATH)),
-                    c.getString(c.getColumnIndex(SITE_COLUMN_TITLE)),
-                    c.getString(c.getColumnIndex(SITE_COLUMN_TYPE)),
-                    c.getString(c.getColumnIndex(SITE_COLUMN_CONTENT)),
-                    c.getDouble(c.getColumnIndex(SITE_COLUMN_LATITUDE)),
-                    c.getDouble(c.getColumnIndex(SITE_COLUMN_LONGITUDE)),
-                    c.getDouble(c.getColumnIndex(SITE_COLUMN_RADIUS)),
-                    c.getString(c.getColumnIndex(SITE_COLUMN_EVENTS))
+            site = new Site(c.getLong(c.getColumnIndex(SiteEntry._ID)),
+                    c.getString(c.getColumnIndex(SiteEntry.COLUMN_PATH)),
+                    c.getString(c.getColumnIndex(SiteEntry.COLUMN_TITLE)),
+                    c.getString(c.getColumnIndex(SiteEntry.COLUMN_TYPE)),
+                    c.getString(c.getColumnIndex(SiteEntry.COLUMN_CONTENT)),
+                    c.getDouble(c.getColumnIndex(SiteEntry.COLUMN_LATITUDE)),
+                    c.getDouble(c.getColumnIndex(SiteEntry.COLUMN_LONGITUDE)),
+                    c.getDouble(c.getColumnIndex(SiteEntry.COLUMN_RADIUS)),
+                    c.getString(c.getColumnIndex(SiteEntry.COLUMN_EVENTS))
             );
         }
 
@@ -98,7 +99,7 @@ public class SiteDBHelper extends DBHelper<Site>{
     @Override
     public List<Site> getAll() {
         List<Site> sites = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + SITE_TABLE_NAME;
+        String selectQuery = "SELECT  * FROM " + SiteEntry.TABLE_NAME;
 
         Log.d(TAG, selectQuery);
 
@@ -108,15 +109,15 @@ public class SiteDBHelper extends DBHelper<Site>{
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Site site = new Site(c.getInt(c.getColumnIndex(KEY_ID)),
-                        c.getString(c.getColumnIndex(SITE_COLUMN_PATH)),
-                        c.getString(c.getColumnIndex(SITE_COLUMN_TITLE)),
-                        c.getString(c.getColumnIndex(SITE_COLUMN_TYPE)),
-                        c.getString(c.getColumnIndex(SITE_COLUMN_CONTENT)),
-                        c.getDouble(c.getColumnIndex(SITE_COLUMN_LATITUDE)),
-                        c.getDouble(c.getColumnIndex(SITE_COLUMN_LONGITUDE)),
-                        c.getDouble(c.getColumnIndex(SITE_COLUMN_RADIUS)),
-                        c.getString(c.getColumnIndex(SITE_COLUMN_EVENTS))
+                Site site = new Site(c.getLong(c.getColumnIndex(SiteEntry._ID)),
+                        c.getString(c.getColumnIndex(SiteEntry.COLUMN_PATH)),
+                        c.getString(c.getColumnIndex(SiteEntry.COLUMN_TITLE)),
+                        c.getString(c.getColumnIndex(SiteEntry.COLUMN_TYPE)),
+                        c.getString(c.getColumnIndex(SiteEntry.COLUMN_CONTENT)),
+                        c.getDouble(c.getColumnIndex(SiteEntry.COLUMN_LATITUDE)),
+                        c.getDouble(c.getColumnIndex(SiteEntry.COLUMN_LONGITUDE)),
+                        c.getDouble(c.getColumnIndex(SiteEntry.COLUMN_RADIUS)),
+                        c.getString(c.getColumnIndex(SiteEntry.COLUMN_EVENTS))
                 );
 
                 // adding to destination list
@@ -132,19 +133,19 @@ public class SiteDBHelper extends DBHelper<Site>{
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_ID, site.getId());
-        values.put(SITE_COLUMN_PATH, site.getPath());
-        values.put(SITE_COLUMN_TITLE, site.getTitle());
-        values.put(SITE_COLUMN_TYPE, site.getType());
-        values.put(SITE_COLUMN_CONTENT, site.getContent());
-        values.put(SITE_COLUMN_LATITUDE, site.getLatitude());
-        values.put(SITE_COLUMN_RADIUS, site.getRadius());
-        values.put(SITE_COLUMN_EVENTS, site.getEvents());
+        values.put(SiteEntry._ID, site.getId());
+        values.put(SiteEntry.COLUMN_PATH, site.getPath());
+        values.put(SiteEntry.COLUMN_TITLE, site.getTitle());
+        values.put(SiteEntry.COLUMN_TYPE, site.getType());
+        values.put(SiteEntry.COLUMN_CONTENT, site.getContent());
+        values.put(SiteEntry.COLUMN_LATITUDE, site.getLatitude());
+        values.put(SiteEntry.COLUMN_RADIUS, site.getRadius());
+        values.put(SiteEntry.COLUMN_EVENTS, site.getEvents());
 
 
 
         // updating row
-        return db.update(SITE_TABLE_NAME, values, KEY_ID + " = ?",
+        return db.update(SiteEntry.TABLE_NAME, values, SiteEntry._ID + " = ?",
                 new String[] { String.valueOf(site.getId()) });
     }
 

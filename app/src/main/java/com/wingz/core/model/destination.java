@@ -22,7 +22,7 @@ package com.wingz.core.model;
  */
 public class Destination {
 
-    private int id;
+    private long id;
     private String city;
     private String public_transport;
     private String taxi;
@@ -34,7 +34,7 @@ public class Destination {
     public Destination(){
 
     }
-    public Destination(int id, String city, String public_transport, String taxi, String hotel, String restaurant, String events) {
+    public Destination(long id, String city, String public_transport, String taxi, String hotel, String restaurant, String events) {
         this.id = id;
         this.city = city;
         this.public_transport = public_transport;
@@ -45,11 +45,11 @@ public class Destination {
     }
 
     // Getters and Setters
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

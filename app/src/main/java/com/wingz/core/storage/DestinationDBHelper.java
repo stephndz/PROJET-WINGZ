@@ -44,20 +44,20 @@ public class DestinationDBHelper extends DBHelper<Destination> {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(DESTINATION_COLUMN_CITY, destination.getCity());
-        values.put(DESTINATION_COLUMN_PUBLIC_TRANSPORT,destination.getPublic_transport());
-        values.put(DESTINATION_COLUMN_PRIVATE_TRANSPORT,destination.getTaxi());
-        values.put(DESTINATION_COLUMN_HOTEL,destination.getHotel());
-        values.put(DESTINATION_COLUMN_RESTAURANT,destination.getRestaurant());
-        values.put(DESTINATION_COLUMN_EVENTS,destination.getEvents());
+        values.put(DestinationEntry.COLUMN_CITY, destination.getCity());
+        values.put(DestinationEntry.COLUMN_PUBLIC_TRANSPORT,destination.getPublic_transport());
+        values.put(DestinationEntry.COLUMN_PRIVATE_TRANSPORT,destination.getTaxi());
+        values.put(DestinationEntry.COLUMN_HOTEL,destination.getHotel());
+        values.put(DestinationEntry.COLUMN_RESTAURANT,destination.getRestaurant());
+        values.put(DestinationEntry.COLUMN_EVENTS,destination.getEvents());
 
-        return db.insert(DESTINATION_TABLE_NAME, null, values);
+        return db.insert(DestinationEntry.TABLE_NAME, null, values);
     }
 
     @Override
     public void delete(long key) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(DESTINATION_TABLE_NAME, KEY_ID + " = ?",
+        db.delete(DestinationEntry.TABLE_NAME, DestinationEntry._ID + " = ?",
                 new String[] { String.valueOf(key) });
     }
 
@@ -65,8 +65,8 @@ public class DestinationDBHelper extends DBHelper<Destination> {
     public Destination getOne(long key) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + DESTINATION_TABLE_NAME + " WHERE "
-                + KEY_ID + " = " + key;
+        String selectQuery = "SELECT  * FROM " + DestinationEntry.TABLE_NAME + " WHERE "
+                + DestinationEntry._ID + " = " + key;
 
         Log.d(TAG, selectQuery);
 
@@ -77,13 +77,13 @@ public class DestinationDBHelper extends DBHelper<Destination> {
 
         Destination destination = null;
         if (c != null) {
-            destination = new Destination(c.getInt(c.getColumnIndex(KEY_ID)),
-                    c.getString(c.getColumnIndex(DESTINATION_COLUMN_CITY)),
-                    c.getString(c.getColumnIndex(DESTINATION_COLUMN_PRIVATE_TRANSPORT)),
-                    c.getString(c.getColumnIndex(DESTINATION_COLUMN_PRIVATE_TRANSPORT)),
-                    c.getString(c.getColumnIndex(DESTINATION_COLUMN_HOTEL)),
-                    c.getString(c.getColumnIndex(DESTINATION_COLUMN_RESTAURANT)),
-                    c.getString(c.getColumnIndex(DESTINATION_COLUMN_EVENTS))
+            destination = new Destination(c.getLong(c.getColumnIndex(DestinationEntry._ID)),
+                    c.getString(c.getColumnIndex(DestinationEntry.COLUMN_CITY)),
+                    c.getString(c.getColumnIndex(DestinationEntry.COLUMN_PRIVATE_TRANSPORT)),
+                    c.getString(c.getColumnIndex(DestinationEntry.COLUMN_PRIVATE_TRANSPORT)),
+                    c.getString(c.getColumnIndex(DestinationEntry.COLUMN_HOTEL)),
+                    c.getString(c.getColumnIndex(DestinationEntry.COLUMN_RESTAURANT)),
+                    c.getString(c.getColumnIndex(DestinationEntry.COLUMN_EVENTS))
             );
         }
 
@@ -94,7 +94,7 @@ public class DestinationDBHelper extends DBHelper<Destination> {
     @Override
     public List<Destination> getAll() {
         List<Destination> destinations = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + DESTINATION_TABLE_NAME;
+        String selectQuery = "SELECT  * FROM " + DestinationEntry.TABLE_NAME;
 
         Log.d(TAG, selectQuery);
 
@@ -104,13 +104,13 @@ public class DestinationDBHelper extends DBHelper<Destination> {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Destination dest = new Destination(c.getInt(c.getColumnIndex(KEY_ID)),
-                        c.getString(c.getColumnIndex(DESTINATION_COLUMN_CITY)),
-                        c.getString(c.getColumnIndex(DESTINATION_COLUMN_PRIVATE_TRANSPORT)),
-                        c.getString(c.getColumnIndex(DESTINATION_COLUMN_PRIVATE_TRANSPORT)),
-                        c.getString(c.getColumnIndex(DESTINATION_COLUMN_HOTEL)),
-                        c.getString(c.getColumnIndex(DESTINATION_COLUMN_RESTAURANT)),
-                        c.getString(c.getColumnIndex(DESTINATION_COLUMN_EVENTS)));
+                Destination dest = new Destination(c.getLong(c.getColumnIndex(DestinationEntry._ID)),
+                        c.getString(c.getColumnIndex(DestinationEntry.COLUMN_CITY)),
+                        c.getString(c.getColumnIndex(DestinationEntry.COLUMN_PRIVATE_TRANSPORT)),
+                        c.getString(c.getColumnIndex(DestinationEntry.COLUMN_PRIVATE_TRANSPORT)),
+                        c.getString(c.getColumnIndex(DestinationEntry.COLUMN_HOTEL)),
+                        c.getString(c.getColumnIndex(DestinationEntry.COLUMN_RESTAURANT)),
+                        c.getString(c.getColumnIndex(DestinationEntry.COLUMN_EVENTS)));
 
                 // adding to destination list
                 destinations.add(dest);
@@ -126,16 +126,16 @@ public class DestinationDBHelper extends DBHelper<Destination> {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_ID, destination.getId());
-        values.put(DESTINATION_COLUMN_CITY, destination.getCity());
-        values.put(DESTINATION_COLUMN_PUBLIC_TRANSPORT, destination.getPublic_transport());
-        values.put(DESTINATION_COLUMN_PRIVATE_TRANSPORT, destination.getTaxi());
-        values.put(DESTINATION_COLUMN_HOTEL, destination.getHotel());
-        values.put(DESTINATION_COLUMN_RESTAURANT,destination.getRestaurant());
-        values.put(DESTINATION_COLUMN_EVENTS,destination.getEvents());
+        values.put(DestinationEntry._ID, destination.getId());
+        values.put(DestinationEntry.COLUMN_CITY, destination.getCity());
+        values.put(DestinationEntry.COLUMN_PUBLIC_TRANSPORT, destination.getPublic_transport());
+        values.put(DestinationEntry.COLUMN_PRIVATE_TRANSPORT, destination.getTaxi());
+        values.put(DestinationEntry.COLUMN_HOTEL, destination.getHotel());
+        values.put(DestinationEntry.COLUMN_RESTAURANT,destination.getRestaurant());
+        values.put(DestinationEntry.COLUMN_EVENTS,destination.getEvents());
 
         // updating row
-        return db.update(DESTINATION_TABLE_NAME, values, KEY_ID + " = ?",
+        return db.update(DestinationEntry.TABLE_NAME, values, DestinationEntry._ID + " = ?",
                 new String[] { String.valueOf(destination.getId()) });
     }
 }

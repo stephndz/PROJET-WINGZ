@@ -21,7 +21,7 @@ package com.wingz.core.model;
  * Created by Dasha on 10/04/16.
  */
 public class Site {
-    private int id;
+    private long id;
     private String path;
     private String title;
     private String type;
@@ -34,7 +34,7 @@ public class Site {
     public Site(){
 
     }
-    public Site(int id, String path, String title, String type, String content, double latitude, double longitude, double radius, String events) {
+    public Site(long id, String path, String title, String type, String content, double latitude, double longitude, double radius, String events) {
         this.id = id;
         this.path = path;
         this.title = title;
@@ -110,11 +110,11 @@ public class Site {
         this.path = path;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 }
