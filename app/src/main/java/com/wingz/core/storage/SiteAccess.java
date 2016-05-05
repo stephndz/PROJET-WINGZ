@@ -21,7 +21,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.wingz.core.model.Site;
@@ -32,20 +31,34 @@ import java.util.List;
 /**
  * Created by Dasha on 10/04/16.
  */
-public class SiteDBHelper extends DBHelper<Site>{
+public class SiteAccess extends DatabaseAccess<Site> {
+
+    private static SiteAccess instance;
     /**
      * @param context
      */
-    public SiteDBHelper(Context context) {
+    public SiteAccess(Context context) {
         super(context);
+    }
+
+    /**
+     * Return a singleton instance of DatabaseAccess.
+     *
+     * @param context the Context
+     * @return the instance of DabaseAccess
+     */
+    public static SiteAccess getInstance(Context context) {
+        if (instance == null) {
+            instance = new SiteAccess(context);
+        }
+        return instance;
     }
 
     @Override
     public long create(Site site) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.openHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(SiteEntry.COLUMN_PATH, site.getPath());
         values.put(SiteEntry.COLUMN_TITLE, site.getTitle());
         values.put(SiteEntry.COLUMN_TYPE, site.getType());
         values.put(SiteEntry.COLUMN_CONTENT, site.getContent());
@@ -60,17 +73,17 @@ public class SiteDBHelper extends DBHelper<Site>{
     @Override
     public void delete(long key) {
 
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(SiteEntry.TABLE_NAME, SiteEntry._ID + " = ?",
+        SQLiteDatabase db = this.openHelper.getWritableDatabase();
+        db.delete(SiteEntry.TABLE_NAME, SiteEntry.COLUMN_ID + " = ?",
                 new String[] { String.valueOf(key) });
     }
 
     @Override
     public Site getOne(long key) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.openHelper.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + SiteEntry.TABLE_NAME + " WHERE "
-                + SiteEntry._ID + " = " + key;
+                + SiteEntry.COLUMN_ID + " = " + key;
 
         Log.d(TAG, selectQuery);
 
@@ -81,8 +94,7 @@ public class SiteDBHelper extends DBHelper<Site>{
 
         Site site = null;
         if (c != null) {
-            site = new Site(c.getLong(c.getColumnIndex(SiteEntry._ID)),
-                    c.getString(c.getColumnIndex(SiteEntry.COLUMN_PATH)),
+            site = new Site(c.getLong(c.getColumnIndex(SiteEntry.COLUMN_ID)),
                     c.getString(c.getColumnIndex(SiteEntry.COLUMN_TITLE)),
                     c.getString(c.getColumnIndex(SiteEntry.COLUMN_TYPE)),
                     c.getString(c.getColumnIndex(SiteEntry.COLUMN_CONTENT)),
@@ -99,18 +111,18 @@ public class SiteDBHelper extends DBHelper<Site>{
     @Override
     public List<Site> getAll() {
         List<Site> sites = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + SiteEntry.TABLE_NAME;
+        String selectQuery = "SELECT * FROM " + SiteEntry.TABLE_NAME;
 
         Log.d(TAG, selectQuery);
 
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.openHelper.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
+
 
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Site site = new Site(c.getLong(c.getColumnIndex(SiteEntry._ID)),
-                        c.getString(c.getColumnIndex(SiteEntry.COLUMN_PATH)),
+                Site site = new Site(c.getLong(c.getColumnIndex(SiteEntry.COLUMN_ID)),
                         c.getString(c.getColumnIndex(SiteEntry.COLUMN_TITLE)),
                         c.getString(c.getColumnIndex(SiteEntry.COLUMN_TYPE)),
                         c.getString(c.getColumnIndex(SiteEntry.COLUMN_CONTENT)),
@@ -130,11 +142,10 @@ public class SiteDBHelper extends DBHelper<Site>{
 
     @Override
     public int update(Site site) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.openHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(SiteEntry._ID, site.getId());
-        values.put(SiteEntry.COLUMN_PATH, site.getPath());
+        values.put(SiteEntry.COLUMN_ID, site.getId());
         values.put(SiteEntry.COLUMN_TITLE, site.getTitle());
         values.put(SiteEntry.COLUMN_TYPE, site.getType());
         values.put(SiteEntry.COLUMN_CONTENT, site.getContent());
@@ -145,7 +156,7 @@ public class SiteDBHelper extends DBHelper<Site>{
 
 
         // updating row
-        return db.update(SiteEntry.TABLE_NAME, values, SiteEntry._ID + " = ?",
+        return db.update(SiteEntry.TABLE_NAME, values, SiteEntry.COLUMN_ID + " = ?",
                 new String[] { String.valueOf(site.getId()) });
     }
 

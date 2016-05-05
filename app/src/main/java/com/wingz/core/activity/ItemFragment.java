@@ -27,9 +27,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.wingz.core.model.Site;
+import com.wingz.core.storage.SiteAccess;
 import com.wingz.core.test.R;
 import com.wingz.core.activity.dummy.DummyContent;
 import com.wingz.core.activity.dummy.DummyContent.DummyItem;
+
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -44,6 +48,7 @@ public class ItemFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private List<Site> toShow;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -69,6 +74,10 @@ public class ItemFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        SiteAccess siteAccess = SiteAccess.getInstance(this.getContext());
+        siteAccess.open();
+        toShow = siteAccess.getAll();
+        siteAccess.close();
     }
 
     @Override
@@ -85,7 +94,7 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(toShow, mListener));
         }
         return view;
     }
@@ -120,6 +129,6 @@ public class ItemFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Site item);
     }
 }

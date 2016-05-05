@@ -24,12 +24,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.wingz.core.test.R;
 
 public class ContentActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+    private String contentText;
+    private int contentLinkImage;
+    private TextView mTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +55,12 @@ public class ContentActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        Bundle b = getIntent().getExtras();
+        contentText = b.getString("content");
+        contentLinkImage = b.getInt("id");
+        mTextView = (TextView) findViewById(R.id.content_text);
+        mTextView.setText(contentText);
+
     }
 
     @Override

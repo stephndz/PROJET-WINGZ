@@ -17,7 +17,9 @@
 
 package com.wingz.core.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,10 +27,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wingz.core.model.Site;
 import com.wingz.core.test.R;
 import com.wingz.core.activity.ItemFragment.OnListFragmentInteractionListener;
 import com.wingz.core.activity.dummy.DummyContent.DummyItem;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -38,10 +43,12 @@ import java.util.List;
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Site> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private List<Integer> mRessources;
+    private Context mContext;
 
-    public MyItemRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyItemRecyclerViewAdapter(List<Site> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -50,6 +57,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_item, parent, false);
+        mContext = parent.getContext();
         return new ViewHolder(view);
     }
 
@@ -57,8 +65,20 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         //holder.mTextView.setText(mValues.get(position).id);
-        holder.mTextView.setText(mValues.get(position).content);
-
+        holder.mTextView.setText(mValues.get(position).getContent());
+        try
+        {
+            // get input stream
+            InputStream ims = mContext.getAssets().open("sites/photos/"+mValues.get(position).getId()+".jpg");
+            // load image as Drawable
+            Drawable d = Drawable.createFromStream(ims, null);
+            // set image to ImageView
+            holder.mImageView.setImageDrawable(d);
+        }
+        catch(IOException ex)
+        {
+            return;
+        }
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +87,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
                     Intent intent = new Intent(holder.mView.getContext(),ContentActivity.class);
+                    intent.putExtra("content", holder.mItem.getContent());
+                    intent.putExtra("imageId",holder.mItem.getId());
                     holder.mView.getContext().startActivity(intent);
                 }
             }
@@ -82,7 +104,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final View mView;
         public final TextView mTextView;
         public final ImageView mImageView;
-        public DummyItem mItem;
+        public Site mItem;
 
         public ViewHolder(View view) {
             super(view);

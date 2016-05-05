@@ -22,7 +22,6 @@ package com.wingz.core.model;
  */
 public class Site {
     private long id;
-    private String path;
     private String title;
     private String type;
     private String content;
@@ -34,9 +33,8 @@ public class Site {
     public Site(){
 
     }
-    public Site(long id, String path, String title, String type, String content, double latitude, double longitude, double radius, String events) {
+    public Site(long id, String title, String type, String content, double latitude, double longitude, double radius, String events) {
         this.id = id;
-        this.path = path;
         this.title = title;
         this.type = type;
         this.content = content;
@@ -100,14 +98,6 @@ public class Site {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public long getId() {

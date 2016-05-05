@@ -31,22 +31,38 @@ import java.util.List;
 /**
  * Created by Dasha on 10/04/16.
  */
-public class DestinationDBHelper extends DBHelper<Destination> {
+public class DestinationAccess extends DatabaseAccess<Destination> {
+
+    protected static DestinationAccess instance;
     /**
+     * Private constructor to aboid object creation from outside classes.
+     *
      * @param context
      */
-    public DestinationDBHelper(Context context) {
+    private DestinationAccess(Context context) {
         super(context);
+    }
+    /**
+     * Return a singleton instance of DatabaseAccess.
+     *
+     * @param context the Context
+     * @return the instance of DabaseAccess
+     */
+    public static DestinationAccess getInstance(Context context) {
+        if (instance == null) {
+            instance = new DestinationAccess(context);
+        }
+        return instance;
     }
 
     @Override
     public long create(Destination destination) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.openHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(DestinationEntry.COLUMN_CITY, destination.getCity());
         values.put(DestinationEntry.COLUMN_PUBLIC_TRANSPORT,destination.getPublic_transport());
-        values.put(DestinationEntry.COLUMN_PRIVATE_TRANSPORT,destination.getTaxi());
+        values.put(DestinationEntry.COLUMN_PRIVATE_TRANSPORT,destination.getPrivate_transport());
         values.put(DestinationEntry.COLUMN_HOTEL,destination.getHotel());
         values.put(DestinationEntry.COLUMN_RESTAURANT,destination.getRestaurant());
         values.put(DestinationEntry.COLUMN_EVENTS,destination.getEvents());
@@ -56,17 +72,17 @@ public class DestinationDBHelper extends DBHelper<Destination> {
 
     @Override
     public void delete(long key) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(DestinationEntry.TABLE_NAME, DestinationEntry._ID + " = ?",
+        SQLiteDatabase db = this.openHelper.getWritableDatabase();
+        db.delete(DestinationEntry.TABLE_NAME, DestinationEntry.COLUMN_ID + " = ?",
                 new String[] { String.valueOf(key) });
     }
 
     @Override
     public Destination getOne(long key) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.openHelper.getWritableDatabase();
 
         String selectQuery = "SELECT  * FROM " + DestinationEntry.TABLE_NAME + " WHERE "
-                + DestinationEntry._ID + " = " + key;
+                + DestinationEntry.COLUMN_ID + " = " + key;
 
         Log.d(TAG, selectQuery);
 
@@ -77,7 +93,7 @@ public class DestinationDBHelper extends DBHelper<Destination> {
 
         Destination destination = null;
         if (c != null) {
-            destination = new Destination(c.getLong(c.getColumnIndex(DestinationEntry._ID)),
+            destination = new Destination(c.getLong(c.getColumnIndex(DestinationEntry.COLUMN_ID)),
                     c.getString(c.getColumnIndex(DestinationEntry.COLUMN_CITY)),
                     c.getString(c.getColumnIndex(DestinationEntry.COLUMN_PRIVATE_TRANSPORT)),
                     c.getString(c.getColumnIndex(DestinationEntry.COLUMN_PRIVATE_TRANSPORT)),
@@ -98,15 +114,15 @@ public class DestinationDBHelper extends DBHelper<Destination> {
 
         Log.d(TAG, selectQuery);
 
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.openHelper.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Destination dest = new Destination(c.getLong(c.getColumnIndex(DestinationEntry._ID)),
+                Destination dest = new Destination(c.getLong(c.getColumnIndex(DestinationEntry.COLUMN_ID)),
                         c.getString(c.getColumnIndex(DestinationEntry.COLUMN_CITY)),
-                        c.getString(c.getColumnIndex(DestinationEntry.COLUMN_PRIVATE_TRANSPORT)),
+                        c.getString(c.getColumnIndex(DestinationEntry.COLUMN_PUBLIC_TRANSPORT)),
                         c.getString(c.getColumnIndex(DestinationEntry.COLUMN_PRIVATE_TRANSPORT)),
                         c.getString(c.getColumnIndex(DestinationEntry.COLUMN_HOTEL)),
                         c.getString(c.getColumnIndex(DestinationEntry.COLUMN_RESTAURANT)),
@@ -123,19 +139,19 @@ public class DestinationDBHelper extends DBHelper<Destination> {
 
     @Override
     public int update(Destination destination) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.openHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(DestinationEntry._ID, destination.getId());
+        values.put(DestinationEntry.COLUMN_ID, destination.getId());
         values.put(DestinationEntry.COLUMN_CITY, destination.getCity());
         values.put(DestinationEntry.COLUMN_PUBLIC_TRANSPORT, destination.getPublic_transport());
-        values.put(DestinationEntry.COLUMN_PRIVATE_TRANSPORT, destination.getTaxi());
+        values.put(DestinationEntry.COLUMN_PRIVATE_TRANSPORT, destination.getPrivate_transport());
         values.put(DestinationEntry.COLUMN_HOTEL, destination.getHotel());
         values.put(DestinationEntry.COLUMN_RESTAURANT,destination.getRestaurant());
         values.put(DestinationEntry.COLUMN_EVENTS,destination.getEvents());
 
         // updating row
-        return db.update(DestinationEntry.TABLE_NAME, values, DestinationEntry._ID + " = ?",
+        return db.update(DestinationEntry.TABLE_NAME, values, DestinationEntry.COLUMN_ID + " = ?",
                 new String[] { String.valueOf(destination.getId()) });
     }
 }

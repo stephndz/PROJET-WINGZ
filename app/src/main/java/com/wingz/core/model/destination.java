@@ -25,7 +25,7 @@ public class Destination {
     private long id;
     private String city;
     private String public_transport;
-    private String taxi;
+    private String private_transport;
     private String hotel;
     private String restaurant;
     private String events;
@@ -34,11 +34,11 @@ public class Destination {
     public Destination(){
 
     }
-    public Destination(long id, String city, String public_transport, String taxi, String hotel, String restaurant, String events) {
+    public Destination(long id, String city, String public_transport, String private_transport, String hotel, String restaurant, String events) {
         this.id = id;
         this.city = city;
         this.public_transport = public_transport;
-        this.taxi = taxi;
+        this.private_transport = private_transport;
         this.hotel = hotel;
         this.restaurant = restaurant;
         this.events = events;
@@ -69,12 +69,12 @@ public class Destination {
         this.public_transport = public_transport;
     }
 
-    public String getTaxi() {
-        return taxi;
+    public String getPrivate_transport() {
+        return private_transport;
     }
 
-    public void setTaxi(String taxi) {
-        this.taxi = taxi;
+    public void setPrivate_transport(String private_transport) {
+        this.private_transport = private_transport;
     }
 
     public String getHotel() {

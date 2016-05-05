@@ -45,7 +45,6 @@ public abstract class DBHelper<T> extends SQLiteOpenHelper{
      */
     protected static class SiteEntry implements BaseColumns{
         protected static final String TABLE_NAME = "site";
-        protected static final String COLUMN_PATH = "path";
         protected static final String COLUMN_TITLE = "title";
         protected static final String COLUMN_TYPE = "type";
         protected static final String COLUMN_CONTENT = "content";
@@ -80,7 +79,6 @@ public abstract class DBHelper<T> extends SQLiteOpenHelper{
      */
     private static final String CREATE_TABLE_SITE = "CREATE TABLE "+ SiteEntry.TABLE_NAME
             + "(" + SiteEntry._ID + " INTEGER PRIMARY KEY,"
-            + SiteEntry.COLUMN_PATH + " TEXT,"
             + SiteEntry.COLUMN_TITLE + "TEXT,"
             + SiteEntry.COLUMN_TYPE + " TEXT,"
             + SiteEntry.COLUMN_CONTENT + "TEXT,"
