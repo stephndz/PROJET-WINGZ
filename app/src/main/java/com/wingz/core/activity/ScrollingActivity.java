@@ -98,7 +98,8 @@ public class ScrollingActivity extends AppCompatActivity
         setContentView(R.layout.activity_scrolling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        // Instantiate the floating button to sync
+        // TODO: The sync button updates the list
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_scrolling);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -346,6 +347,7 @@ public class ScrollingActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+        // Location updates send to the ItemFragment to update the displayed list
         onNewLocation(mCurrentLocation);
         Toast.makeText(this, "Checking for sites",
                 Toast.LENGTH_SHORT).show();
@@ -360,7 +362,7 @@ public class ScrollingActivity extends AppCompatActivity
         ItemFragment listfrag = (ItemFragment) getSupportFragmentManager().findFragmentById(R.id.list);
 
         if(listfrag != null){
-            listfrag.checkLocationForSite(location);
+            return listfrag.checkLocationForSite(location);
         }
         return false;
     }

@@ -25,6 +25,7 @@ Fastest and normal update interval are setted by default to 5 and 10 seconds. Th
 Here are what the mobile is presently doing. For more details, you can get to the source code directly.
 For more information, check the [activity lifecycle](http://developer.android.com/reference/android/app/Activity.html) and [fragment lifecycle](http://developer.android.com/guide/components/fragments.html).
 This app comes with a [pre-loaded](http://stackoverflow.com/questions/513084/how-to-ship-an-android-application-with-a-database) SQLite database containing data about interesting points on a given itinerary.
+The picture are also pre-loaded in an asset folder. 
 
 ### Activity Package 
 
@@ -40,7 +41,7 @@ This fragment displays a list with a picture and a description content. The norm
 Hence, this fragment has a onNewLocation method implemented by the ScrollingActivity. Whenever the location is updated, the ScrollingActivity sends the new location to the ItemFragement.
 Then according to the new location, the currentList containing the actual list displayed updates.
 For each item displayed in the List, the image is loaded from the asset folder that contains all the images needed. I used this tutorial to [read the image from the asset folder](https://xjaphx.wordpress.com/2011/10/02/store-and-use-files-in-assets/).
-
+If the app is not displayed, a [notification](http://developer.android.com/guide/topics/ui/notifiers/notifications.html) can be triggered when a new site is discovered.
 
 #### MyItemRecyclerViewAdapter
 
@@ -110,6 +111,17 @@ Each model i.e site and destination has a corresponding class that implements wi
 
 * DestinationAccess
 * SiteAccess
+
+## More 
+
+Some directions for further development:
+
+* Implement a back-end that serves the apps: The app would pre-load the data needed throughout the trip just before on-boarding
+* Design a user profile/authentification : some interesting points could be saved as favorite
+* Add a map to easily track the trip and better data visualization
+* Add social features: having personal space to manage trip, make some todo, synchronize with Agenda
+* Add easter eggs : functions to make it awesome for the user, hidden game(s)
+* Enhance the design
 
 ## License
 

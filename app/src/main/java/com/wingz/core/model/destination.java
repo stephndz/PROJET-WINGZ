@@ -22,6 +22,7 @@ package com.wingz.core.model;
  */
 public class Destination {
 
+
     private long id;
     private String city;
     private String public_transport;

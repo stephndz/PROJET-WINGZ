@@ -30,16 +30,14 @@ import android.widget.TextView;
 import com.wingz.core.model.Site;
 import com.wingz.core.test.R;
 import com.wingz.core.activity.ItemFragment.OnListFragmentInteractionListener;
-import com.wingz.core.activity.dummy.DummyContent.DummyItem;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Site} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
@@ -64,15 +62,14 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        //holder.mTextView.setText(mValues.get(position).id);
         holder.mTextView.setText(mValues.get(position).getContent());
         try
         {
-            // get input stream
+            // Get input stream
             InputStream ims = mContext.getAssets().open("sites/photos/"+mValues.get(position).getId()+".jpg");
-            // load image as Drawable
+            // Load image as Drawable
             Drawable d = Drawable.createFromStream(ims, null);
-            // set image to ImageView
+            // Set image to ImageView
             holder.mImageView.setImageDrawable(d);
         }
         catch(IOException ex)

@@ -21,6 +21,14 @@ package com.wingz.core.model;
  * Created by Dasha on 10/04/16.
  */
 public class Site {
+    /**
+     * id : Long to identify each site in the table
+     * title: String to sum up what the site refers to
+     * content: Detailled description of the site
+     * latitude, longitude: Coordinates of a site
+     * radius: rough radius of a circle containing the whole site
+     * events: Message to display in the notification
+     */
     private long id;
     private String title;
     private String type;

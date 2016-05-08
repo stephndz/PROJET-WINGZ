@@ -86,7 +86,7 @@ public class ItemFragment extends Fragment {
         siteAccess.open();
         toShow = siteAccess.getAll();
         siteAccess.close();
-        currentList = toShow;
+        currentList = toShow.subList(0,1);
     }
 
     @Override
@@ -127,9 +127,15 @@ public class ItemFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * Checks if a new interesting point can be found 1000m near the current location
+     * @param location new updated location
+     * @return true if the content was updated
+     */
     public boolean checkLocationForSite(Location location){
         Location siteLocation = new Location(location);
         Site item;
+        // Message to display in the notification
         String message = "New content available";
         boolean areNewSiteDiscovered = false;
         if(toShow != null){
@@ -139,7 +145,7 @@ public class ItemFragment extends Fragment {
                 item = toShow.get(i);
                 siteLocation.setLatitude(item.getLatitude());
                 siteLocation.setLongitude(item.getLongitude());
-                if(location.distanceTo(siteLocation) > 100){
+                if(location.distanceTo(siteLocation) < 1000){
                     currentList.add(item);
                     toShow.remove(i);
                     mAdapter.notifyDataSetChanged();
@@ -148,6 +154,7 @@ public class ItemFragment extends Fragment {
                 }
                 i--;
             }
+            // Trigger a notification if a new Site is near
             if(areNewSiteDiscovered){
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(getActivity())
