@@ -346,12 +346,22 @@ public class ScrollingActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-        Toast.makeText(this, "Location Updated:" + location.toString() ,
+        onNewLocation(mCurrentLocation);
+        Toast.makeText(this, "Checking for sites",
                 Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onListFragmentInteraction(Site item) {
+    }
 
+    @Override
+    public boolean onNewLocation(Location location) {
+        ItemFragment listfrag = (ItemFragment) getSupportFragmentManager().findFragmentById(R.id.list);
+
+        if(listfrag != null){
+            listfrag.checkLocationForSite(location);
+        }
+        return false;
     }
 }

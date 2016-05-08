@@ -18,11 +18,14 @@
 package com.wingz.core.activity;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +36,7 @@ import com.wingz.core.test.R;
 import com.wingz.core.activity.dummy.DummyContent;
 import com.wingz.core.activity.dummy.DummyContent.DummyItem;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -49,6 +53,9 @@ public class ItemFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private List<Site> toShow;
+    protected List<Site> currentList;
+    protected MyItemRecyclerViewAdapter mAdapter;
+    private final String TAG = "ItemFragment";
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,7 +65,6 @@ public class ItemFragment extends Fragment {
     }
 
     // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static ItemFragment newInstance(int columnCount) {
         ItemFragment fragment = new ItemFragment();
         Bundle args = new Bundle();
@@ -78,6 +84,7 @@ public class ItemFragment extends Fragment {
         siteAccess.open();
         toShow = siteAccess.getAll();
         siteAccess.close();
+        currentList = toShow;
     }
 
     @Override
@@ -94,7 +101,8 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(toShow, mListener));
+            mAdapter = new MyItemRecyclerViewAdapter(currentList, mListener);
+            recyclerView.setAdapter(mAdapter);
         }
         return view;
     }
@@ -117,6 +125,28 @@ public class ItemFragment extends Fragment {
         mListener = null;
     }
 
+    public boolean checkLocationForSite(Location location){
+        Location siteLocation = new Location(location);
+        Site item;
+        if(toShow != null){
+            int i = toShow.size() -1;
+            while(i >= 0){
+                //Log.d(TAG, Integer.toString(toShow.size()));
+                item = toShow.get(i);
+                siteLocation.setLatitude(item.getLatitude());
+                siteLocation.setLongitude(item.getLongitude());
+                if(location.distanceTo(siteLocation) > 100){
+                    currentList.add(item);
+                    toShow.remove(i);
+                    mAdapter.notifyDataSetChanged();
+                }
+                i--;
+            }
+            return true;
+        }
+        return false;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -130,5 +160,6 @@ public class ItemFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Site item);
+        boolean onNewLocation(Location location);
     }
 }
