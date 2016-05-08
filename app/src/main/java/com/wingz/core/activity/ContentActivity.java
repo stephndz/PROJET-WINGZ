@@ -17,6 +17,7 @@
 
 package com.wingz.core.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,12 +25,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.wingz.core.test.R;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class ContentActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+    private String contentText;
+    private int contentLinkImage;
+    private TextView mTextView;
+    private ImageView mImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +52,8 @@ public class ContentActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
+        // Floating button to save an item as a favorite
+        // TODO: Implement favorite action
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_content);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +62,26 @@ public class ContentActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        // Extra contents to build the ContentActivity
+        Bundle b = getIntent().getExtras();
+        contentText = b.getString("content");
+        contentLinkImage = b.getInt("id");
+        mTextView = (TextView) findViewById(R.id.content_text);
+        mTextView.setText(contentText);
+        mImageView = (ImageView)findViewById(R.id.content_image);
+        try
+        {
+            // Get input stream
+            InputStream ims = this.getAssets().open("sites/photos/"+contentLinkImage+".jpg");
+            // Load image as Drawable
+            Drawable d = Drawable.createFromStream(ims, null);
+            // Set image to ImageView
+            mImageView.setImageDrawable(d);
+        }
+        catch(IOException ex)
+        {
+            return;
+        }
     }
 
     @Override

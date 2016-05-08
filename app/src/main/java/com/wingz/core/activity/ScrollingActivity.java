@@ -32,6 +32,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.wingz.core.model.Site;
 import com.wingz.core.test.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -97,7 +98,8 @@ public class ScrollingActivity extends AppCompatActivity
         setContentView(R.layout.activity_scrolling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        // Instantiate the floating button to sync
+        // TODO: The sync button updates the list
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_scrolling);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -345,12 +347,23 @@ public class ScrollingActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-        Toast.makeText(this, "Location Updated:" + location.toString() ,
+        // Location updates send to the ItemFragment to update the displayed list
+        onNewLocation(mCurrentLocation);
+        Toast.makeText(this, "Checking for sites",
                 Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(Site item) {
+    }
 
+    @Override
+    public boolean onNewLocation(Location location) {
+        ItemFragment listfrag = (ItemFragment) getSupportFragmentManager().findFragmentById(R.id.list);
+
+        if(listfrag != null){
+            return listfrag.checkLocationForSite(location);
+        }
+        return false;
     }
 }

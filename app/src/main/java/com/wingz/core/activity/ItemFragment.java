@@ -18,18 +18,28 @@
 package com.wingz.core.activity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.wingz.core.model.Site;
+import com.wingz.core.storage.SiteAccess;
 import com.wingz.core.test.R;
 import com.wingz.core.activity.dummy.DummyContent;
 import com.wingz.core.activity.dummy.DummyContent.DummyItem;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -44,6 +54,10 @@ public class ItemFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private List<Site> toShow;
+    protected List<Site> currentList;
+    protected MyItemRecyclerViewAdapter mAdapter;
+    private final String TAG = "ItemFragment";
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,7 +67,6 @@ public class ItemFragment extends Fragment {
     }
 
     // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static ItemFragment newInstance(int columnCount) {
         ItemFragment fragment = new ItemFragment();
         Bundle args = new Bundle();
@@ -69,6 +82,11 @@ public class ItemFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        SiteAccess siteAccess = SiteAccess.getInstance(this.getContext());
+        siteAccess.open();
+        toShow = siteAccess.getAll();
+        siteAccess.close();
+        currentList = toShow.subList(0,1);
     }
 
     @Override
@@ -85,7 +103,8 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            mAdapter = new MyItemRecyclerViewAdapter(currentList, mListener);
+            recyclerView.setAdapter(mAdapter);
         }
         return view;
     }
@@ -109,6 +128,49 @@ public class ItemFragment extends Fragment {
     }
 
     /**
+     * Checks if a new interesting point can be found 1000m near the current location
+     * @param location new updated location
+     * @return true if the content was updated
+     */
+    public boolean checkLocationForSite(Location location){
+        Location siteLocation = new Location(location);
+        Site item;
+        // Message to display in the notification
+        String message = "New content available";
+        boolean areNewSiteDiscovered = false;
+        if(toShow != null){
+            int i = toShow.size() -1;
+            while(i >= 0){
+                //Log.d(TAG, Integer.toString(toShow.size()));
+                item = toShow.get(i);
+                siteLocation.setLatitude(item.getLatitude());
+                siteLocation.setLongitude(item.getLongitude());
+                if(location.distanceTo(siteLocation) < 1000){
+                    currentList.add(item);
+                    toShow.remove(i);
+                    mAdapter.notifyDataSetChanged();
+                    areNewSiteDiscovered = true;
+                    message = item.getContent();
+                }
+                i--;
+            }
+            // Trigger a notification if a new Site is near
+            if(areNewSiteDiscovered){
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(getActivity())
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("New Site discovered")
+                                .setContentText(message);
+                // Creates an explicit intent for an Activity in your app
+                Intent resultIntent = new Intent(getActivity(), ItemFragment.class);
+
+            }
+            return areNewSiteDiscovered;
+        }
+        return false;
+    }
+
+    /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -120,6 +182,7 @@ public class ItemFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Site item);
+        boolean onNewLocation(Location location);
     }
 }
