@@ -68,7 +68,7 @@ public abstract class DatabaseAccess<T> {
      */
 
     /**
-     * Private constructor to aboid object creation from outside classes.
+     * Private constructor to avoid object creation from outside classes.
      *
      * @param context
      */

@@ -18,10 +18,12 @@
 package com.wingz.core.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -128,6 +130,8 @@ public class ItemFragment extends Fragment {
     public boolean checkLocationForSite(Location location){
         Location siteLocation = new Location(location);
         Site item;
+        String message = "New content available";
+        boolean areNewSiteDiscovered = false;
         if(toShow != null){
             int i = toShow.size() -1;
             while(i >= 0){
@@ -139,10 +143,22 @@ public class ItemFragment extends Fragment {
                     currentList.add(item);
                     toShow.remove(i);
                     mAdapter.notifyDataSetChanged();
+                    areNewSiteDiscovered = true;
+                    message = item.getContent();
                 }
                 i--;
             }
-            return true;
+            if(areNewSiteDiscovered){
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(getActivity())
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("New Site discovered")
+                                .setContentText(message);
+                // Creates an explicit intent for an Activity in your app
+                Intent resultIntent = new Intent(getActivity(), ItemFragment.class);
+
+            }
+            return areNewSiteDiscovered;
         }
         return false;
     }
