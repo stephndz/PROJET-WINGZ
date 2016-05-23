@@ -38,6 +38,8 @@ import com.wingz.core.test.R;
 import com.wingz.core.activity.dummy.DummyContent;
 import com.wingz.core.activity.dummy.DummyContent.DummyItem;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -86,7 +88,9 @@ public class ItemFragment extends Fragment {
         siteAccess.open();
         toShow = siteAccess.getAll();
         siteAccess.close();
-        currentList = toShow.subList(0,1);
+        currentList = new ArrayList();
+        currentList.add(toShow.get(0));
+        toShow.remove(0);
     }
 
     @Override
@@ -138,15 +142,17 @@ public class ItemFragment extends Fragment {
         // Message to display in the notification
         String message = "New content available";
         boolean areNewSiteDiscovered = false;
+        //ArrayList<Site> toAdd = new ArrayList();
         if(toShow != null){
             int i = toShow.size() -1;
-            while(i >= 0){
+            while(i >= 0) {
                 //Log.d(TAG, Integer.toString(toShow.size()));
                 item = toShow.get(i);
                 siteLocation.setLatitude(item.getLatitude());
                 siteLocation.setLongitude(item.getLongitude());
-                if(location.distanceTo(siteLocation) < 1000){
+                if (location.distanceTo(siteLocation) < 1000) {
                     currentList.add(item);
+                    //toAdd.add(item);
                     toShow.remove(i);
                     mAdapter.notifyDataSetChanged();
                     areNewSiteDiscovered = true;
@@ -154,8 +160,12 @@ public class ItemFragment extends Fragment {
                 }
                 i--;
             }
+
             // Trigger a notification if a new Site is near
             if(areNewSiteDiscovered){
+                //toShow.removeAll(toAdd);
+                //currentList.addAll(toAdd);
+                //mAdapter.notifyDataSetChanged();
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(getActivity())
                                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -169,6 +179,8 @@ public class ItemFragment extends Fragment {
         }
         return false;
     }
+
+
 
     /**
      * This interface must be implemented by activities that contain this
