@@ -37,7 +37,7 @@ public class ContentActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private String contentText;
-    private int contentLinkImage;
+    private long contentLinkImage;
     private TextView mTextView;
     private ImageView mImageView;
 
@@ -65,7 +65,7 @@ public class ContentActivity extends AppCompatActivity {
         // Extra contents to build the ContentActivity
         Bundle b = getIntent().getExtras();
         contentText = b.getString("content");
-        contentLinkImage = b.getInt("id");
+        contentLinkImage = b.getLong("id");
         mTextView = (TextView) findViewById(R.id.content_text);
         mTextView.setText(contentText);
         mImageView = (ImageView)findViewById(R.id.content_image);
