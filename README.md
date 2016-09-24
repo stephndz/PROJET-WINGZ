@@ -1,6 +1,6 @@
 # Wingz
 
-Simple android proto-app using coarse devise location. It is intended for Android 4.4.2 and above.
+Simple android proto-app using coarse device location. It is intended for Android 4.4.2 and above.
 
 ## Pre-requisites
 
@@ -8,14 +8,7 @@ Simple android proto-app using coarse devise location. It is intended for Androi
 * Android Build Tools v23.0.2
 * Android Support Repository
 
-## User features
-
-### Location 
-
-The app launch automatic location updates so it can provide content-aware data.
-Fastest and normal update interval are setted by default to 5 and 10 seconds. The app should rely only on GPS connectivity to get the current location.
-
-## User Features 
+## Main features
 
 * Displays a List of nearby sites that a given vehicle(car, plane, train) came across
 * Shows detailled content about one site
@@ -27,6 +20,11 @@ For more information, check the [activity lifecycle](http://developer.android.co
 This app comes with a [pre-loaded](http://stackoverflow.com/questions/513084/how-to-ship-an-android-application-with-a-database) SQLite database containing data about interesting points on a given itinerary.
 The picture are also pre-loaded in an asset folder. 
 
+### Location 
+
+The app launches automatic location updates so it can provide content-aware data.
+Fastest and normal update intervals are setted by default between 5 and 10 seconds. The app should rely only on GPS connectivity to get the current location.
+
 ### Activity Package 
 
 #### ScrollingActivity
@@ -37,7 +35,7 @@ It implements GoogleApiClient interfaces to [fetch the location](http://develope
 
 #### ItemFragment
 
-This fragment displays a list with a picture and a description content. The normal behaviour after loading the database is to initialize a list of interesting points (called Sites) and update the list according to the device location.
+This fragment displays a list with a picture and a description content for each list item. The normal behaviour after loading the database is to initialize a list of interesting points (called Sites) and update the list according to the device location.
 Hence, this fragment has a onNewLocation method implemented by the ScrollingActivity. Whenever the location is updated, the ScrollingActivity sends the new location to the ItemFragement.
 Then according to the new location, the currentList containing the actual list displayed updates.
 For each item displayed in the List, the image is loaded from the asset folder that contains all the images needed. I used this tutorial to [read the image from the asset folder](https://xjaphx.wordpress.com/2011/10/02/store-and-use-files-in-assets/).
@@ -45,8 +43,8 @@ If the app is not displayed, a [notification](http://developer.android.com/guide
 
 #### MyItemRecyclerViewAdapter
 
-This Adapter manages how the list of interesting points i.e sites behave. It's basically the link between a set of rough data and their presentation in fragmen_item_list layout.
-For this, this adapte only a needs a Site List and a listener to be instantiated.
+This Adapter manages how the list of interesting points i.e sites behave. It's basically the link between a set of rough data and their presentation in fragment_item_list layout.
+For this, this adapter only a needs a Site List and a listener to be instantiated.
 
 #### ContentActivity
 
@@ -107,7 +105,7 @@ For more information, refer to the [documentation](https://github.com/jgilfelt/a
 
 This in an abstract class is intended to provide with the CRUD methods. For this it contains the names of the tables contained in the database.
 
-Each model i.e site and destination has a corresponding class that implements with all the methods to create, read, update and delete data from the database.
+Each model (i.e site and destination) has a corresponding class that implements with all the methods to create, read, update and delete data from the database.
 
 * DestinationAccess
 * SiteAccess
