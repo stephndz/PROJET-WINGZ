@@ -13,6 +13,8 @@ Simple android proto-app using coarse device location. It is intended for Androi
 * Displays a List of nearby sites that a given vehicle(car, plane, train) came across
 * Shows detailled content about one site
 
+![alt ScrollingViewPreview](https://raw.githubusercontent.com/stephndz/PROJET-WINGZ/master/screenshots/scrollingView.jpg)
+
 ## Overview
 
 Here are what the mobile is presently doing. For more details, you can get to the source code directly.
